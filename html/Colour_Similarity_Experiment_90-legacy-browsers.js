@@ -238,6 +238,8 @@ var centre_cross4;
 var Stim2_displayClock;
 var Circle_2;
 var centre_cross4_4;
+var blankscreenClock;
+var centre_cross_blank;
 var responseClock;
 var mouse;
 var order;
@@ -1005,6 +1007,17 @@ function experimentInit() {
     lineWidth: 1.5, lineColor: new util.Color([1, 1, 1]),
     fillColor: new util.Color([1, 1, 1]),
     opacity: 1, depth: -2, interpolate: true,
+  });
+  
+  // Initialize components for Routine "blankscreen"
+  blankscreenClock = new util.Clock();
+  centre_cross_blank = new visual.ShapeStim ({
+    win: psychoJS.window, name: 'centre_cross_blank', units : 'norm', 
+    vertices: 'cross', size:[0.03, 0.03],
+    ori: 0, pos: [0, 0],
+    lineWidth: 1.5, lineColor: new util.Color([1, 1, 1]),
+    fillColor: new util.Color([1, 1, 1]),
+    opacity: 1, depth: 0, interpolate: true,
   });
   
   // Initialize components for Routine "response"
@@ -1802,6 +1815,9 @@ function trials_2LoopBegin(trials_2LoopScheduler) {
     trials_2LoopScheduler.add(Stim2_displayRoutineBegin(snapshot));
     trials_2LoopScheduler.add(Stim2_displayRoutineEachFrame(snapshot));
     trials_2LoopScheduler.add(Stim2_displayRoutineEnd(snapshot));
+    trials_2LoopScheduler.add(blankscreenRoutineBegin(snapshot));
+    trials_2LoopScheduler.add(blankscreenRoutineEachFrame(snapshot));
+    trials_2LoopScheduler.add(blankscreenRoutineEnd(snapshot));
     trials_2LoopScheduler.add(responseRoutineBegin(snapshot));
     trials_2LoopScheduler.add(responseRoutineEachFrame(snapshot));
     trials_2LoopScheduler.add(responseRoutineEnd(snapshot));
@@ -5123,6 +5139,90 @@ function Stim2_displayRoutineEnd(snapshot) {
     thisExp.addData("Circle2_colour", Circle2_colour);
     thisExp.addData("Ecc", Ecc);
     
+    return Scheduler.Event.NEXT;
+  };
+}
+
+
+var blankscreenComponents;
+function blankscreenRoutineBegin(snapshot) {
+  return function () {
+    //------Prepare to start Routine 'blankscreen'-------
+    t = 0;
+    blankscreenClock.reset(); // clock
+    frameN = -1;
+    continueRoutine = true; // until we're told otherwise
+    routineTimer.add(0.500000);
+    // update component parameters for each repeat
+    // keep track of which components have finished
+    blankscreenComponents = [];
+    blankscreenComponents.push(centre_cross_blank);
+    
+    blankscreenComponents.forEach( function(thisComponent) {
+      if ('status' in thisComponent)
+        thisComponent.status = PsychoJS.Status.NOT_STARTED;
+       });
+    return Scheduler.Event.NEXT;
+  }
+}
+
+
+function blankscreenRoutineEachFrame(snapshot) {
+  return function () {
+    //------Loop for each frame of Routine 'blankscreen'-------
+    // get current time
+    t = blankscreenClock.getTime();
+    frameN = frameN + 1;// number of completed frames (so 0 is the first frame)
+    // update/draw components on each frame
+    
+    // *centre_cross_blank* updates
+    if (t >= 0.0 && centre_cross_blank.status === PsychoJS.Status.NOT_STARTED) {
+      // keep track of start time/frame for later
+      centre_cross_blank.tStart = t;  // (not accounting for frame time here)
+      centre_cross_blank.frameNStart = frameN;  // exact frame index
+      
+      centre_cross_blank.setAutoDraw(true);
+    }
+
+    frameRemains = 0.0 + 0.5 - psychoJS.window.monitorFramePeriod * 0.75;  // most of one frame period left
+    if ((centre_cross_blank.status === PsychoJS.Status.STARTED || centre_cross_blank.status === PsychoJS.Status.FINISHED) && t >= frameRemains) {
+      centre_cross_blank.setAutoDraw(false);
+    }
+    // check for quit (typically the Esc key)
+    if (psychoJS.experiment.experimentEnded || psychoJS.eventManager.getKeys({keyList:['escape']}).length > 0) {
+      return quitPsychoJS('The [Escape] key was pressed. Goodbye!', false);
+    }
+    
+    // check if the Routine should terminate
+    if (!continueRoutine) {  // a component has requested a forced-end of Routine
+      return Scheduler.Event.NEXT;
+    }
+    
+    continueRoutine = false;  // reverts to True if at least one component still running
+    blankscreenComponents.forEach( function(thisComponent) {
+      if ('status' in thisComponent && thisComponent.status !== PsychoJS.Status.FINISHED) {
+        continueRoutine = true;
+      }
+    });
+    
+    // refresh the screen if continuing
+    if (continueRoutine && routineTimer.getTime() > 0) {
+      return Scheduler.Event.FLIP_REPEAT;
+    } else {
+      return Scheduler.Event.NEXT;
+    }
+  };
+}
+
+
+function blankscreenRoutineEnd(snapshot) {
+  return function () {
+    //------Ending Routine 'blankscreen'-------
+    blankscreenComponents.forEach( function(thisComponent) {
+      if (typeof thisComponent.setAutoDraw === 'function') {
+        thisComponent.setAutoDraw(false);
+      }
+    });
     return Scheduler.Event.NEXT;
   };
 }
